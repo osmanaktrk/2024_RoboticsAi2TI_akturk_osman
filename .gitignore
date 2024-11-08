@@ -3,3 +3,5 @@ install/*
 log/*
 examples/*
 ros_tutorials/*
+/examples
+/ros_tutorials
