@@ -1,7 +1,5 @@
-build/*
-install/*
-log/*
-examples/*
-ros_tutorials/*
+/build
+/install
+/log
 /examples
 /ros_tutorials
