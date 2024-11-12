@@ -7,7 +7,7 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 
-class  Lidar(Node):
+class  Obstakel(Node):
 
     def __init__(self):
         # Here you have the class constructor
@@ -57,7 +57,7 @@ def main(args=None):
     # initialize the ROS communication
     rclpy.init(args=args)
     # declare the node constructor
-    lidar = Lidar()       
+    lidar = Obstakel()       
     # pause the program execution, waits for a request to kill the node (ctrl+c)
     rclpy.spin(lidar)
     # Explicity destroy the node

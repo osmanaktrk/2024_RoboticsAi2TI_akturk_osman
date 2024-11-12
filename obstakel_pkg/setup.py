@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'lidar_pkg'
+package_name = 'obstakel_pkg'
 
 setup(
     name=package_name,
@@ -29,7 +29,7 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'lidar_pkg'
+package_name = 'obstakel_pkg'
 
 setup(
     name=package_name,
@@ -50,7 +50,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lidar = lidar_pkg.lidar:main'
+            'obstakel = obstakel_pkg.obstakel:main'
         ],
     },
 )
