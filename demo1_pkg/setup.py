@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "node1 = demo1_pkg.node1:main"
+            "node1 = demo1_pkg.node1:main",
+            "publisher1 = demo1_pkg.publisher1:main"
         ],
     },
 )
