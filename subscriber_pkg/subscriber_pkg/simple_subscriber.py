@@ -18,11 +18,7 @@ class SimpleSubscriber(Node):
         # in this case, the subscriptor will be subscribed on /scan topic with a queue size of 10 messages.
         # use the LaserScan module for /scan topic
         # send the received info to the listener_callback method.
-        self.subscriber = self.create_subscription(
-            LaserScan,
-            '/scan',
-            self.listener_callback,
-            QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))  # is the most used to read LaserScan data and some sensor data.
+        self.subscriber = self.create_subscription(LaserScan, '/scan', self.listener_callback, QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))  # is the most used to read LaserScan data and some sensor data.
 
     def listener_callback(self, msg):
         # print the log info in the terminal

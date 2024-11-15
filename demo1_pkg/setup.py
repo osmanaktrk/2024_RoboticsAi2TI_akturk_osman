@@ -22,7 +22,8 @@ setup(
         'console_scripts': [
             "node1 = demo1_pkg.node1:main",
             "publisher1 = demo1_pkg.publisher1:main",
-            "subscriber1 = demo1_pkg.subscriber1:main"
+            "subscriber1 = demo1_pkg.subscriber1:main",
+            "service1 = demo1_pkg.service1:main"
         ],
     },
 )
