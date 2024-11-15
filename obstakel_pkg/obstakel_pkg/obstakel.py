@@ -6,6 +6,7 @@ from geometry_msgs.msg import Twist
 # import the LaserScan module from sensor_msgs interface
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import ReliabilityPolicy, QoSProfile
+import random
 
 class  Obstakel(Node):
 
@@ -44,8 +45,23 @@ class  Obstakel(Node):
         # Logic of move
 
         if(self.laser_forward < 0.5):
+            #stop
             self.cmd.linear.x = 0.0
-            self.cmd.angular.z = -0.5
+
+            if(self.laser_frontLeft<0.5 and self.laser_frontRight>0.5):
+                #turn right
+                self.cmd.angular.z = -1*random.randint(1, 20)/10
+                self.cmd.linear.x = 0.3
+
+            elif(self.laser_frontLeft>0.5 and self.laser_frontRight<0.5):
+                #turn left
+                self.cmd.angular.z = random.randint(1, 20)/10
+                self.cmd.linear.x = 0.3
+
+            else:
+                #turn right fix
+                self.cmd.angular.z = -0.5
+
         else:
             self.cmd.linear.x = 0.3
             self.cmd.angular.z = 0.0
