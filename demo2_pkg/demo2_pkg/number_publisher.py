@@ -7,7 +7,7 @@ class Publisher(Node):
         super().__init__("number_publisher")
         
         self.publisher_ = self.create_publisher(Int64, "number", 10)
-        self.timer_ = self.create_timer(0.5, self.callback_number_publisher)
+        self.timer_ = self.create_timer(1, self.callback_number_publisher)
         self.get_logger().info("Number publisher has been started")
 
     def callback_number_publisher(self):
