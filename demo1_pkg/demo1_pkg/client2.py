@@ -17,7 +17,7 @@ class Client2(Node):
     def call_add_two_ints(self, a, b):
         client = self.create_client(AddTwoInts, "add_two_ints")
         while not client.wait_for_service(1.0):
-            self.get_logger().warn("Waitingi for service")
+            self.get_logger().warn("Waiting for service")
         
         request = AddTwoInts.Request()
         request.a = a

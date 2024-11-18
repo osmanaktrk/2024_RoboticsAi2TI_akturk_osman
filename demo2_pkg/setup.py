@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             "number_publisher = demo2_pkg.number_publisher:main",
-            "number_counter = demo2_pkg.number_counter:main"
+            "number_counter = demo2_pkg.number_counter:main",
+            "reset_counter = demo2_pkg.reset_counter:main"
         ],
     },
 )
