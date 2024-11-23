@@ -5,6 +5,7 @@ from sensor_msgs.msg import LaserScan
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 import time
 import random
+import math
 
 class Distance(Node):
 
@@ -67,14 +68,21 @@ class Distance(Node):
 
 
 
-    def turn(self, angular_velocity, duration):
-        # Log the orientation (angular_velocity)
-        self.get_logger().info(f'Moving with angular velocity: {angular_velocity}')
+    def turn(self, angle):
+        # Log the orientation (angle)
+        self.get_logger().info(f'Moving with angle: {angle}')
 
         self.cmd.linear.x = 0.0
-        self.cmd.angular.z = angular_velocity
+
+        if angle < 0:
+            self.cmd.angular.z = 0.2
+        else:
+            self.cmd.angular.z = -0.2
 
         start_time = time.time()
+
+        duration = math.pi/((180/abs(angle))*0.2)
+        self.get_logger().info(f"duration: {duration}")
 
         while time.time() - start_time < duration:
             self.publisher_.publish(self.cmd)
@@ -86,37 +94,38 @@ class Distance(Node):
         self.publisher_.publish(self.cmd)
 
 
+
+
     def motion(self):
         self.cmd.linear.x = 0.0
         self.cmd.angular.z = 0.0
 
         # Turn 90 degrees to the right
-        self.turn( -0.2, 7.85)  # -Pi/4 rad
+        self.turn(90)
 
         # Drive 50 cm forward
         self.move(0.2, 0.5)
 
-        # Turn 90 degrees to the left (assuming max angular speed is 0.2 rad/s)
-        self.turn(0.2, 7.85)  # Pi/4 rad
-
+        # Turn 90 degrees to the left
+        self.turn(-90)
 
         # Drive 3.3 meter forward (assuming max speed is 0.2 m/s)
         self.move(0.2, 3.3)
 
-        # Turn 90 degrees to the left (assuming max angular speed is 0.2 rad/s)
-        self.turn(0.2, 7.85)  # Pi/4 rad
+        # Turn 90 degrees to the left
+        self.turn(-90)
 
         # Drive 1.5 meter forward (assuming max speed is 0.2 m/s)
         self.move(0.2, 1.5)
 
-        # Turn 90 degrees to the left (assuming max angular speed is 0.2 rad/s)
-        self.turn(0.2, 7.85)  # Pi/4 rad
+        # Turn 90 degrees to the left 
+        self.turn(-90)
 
         # Drive 4 meter forward (assuming max speed is 0.2 m/s)
         self.move(0.2, 4)
 
         # Turn 90 degrees to the right
-        self.turn( -0.2, 7.85)  # -Pi/4 rad
+        self.turn(90)
 
         # Drive 4 meter forward (assuming max speed is 0.2 m/s)
         self.move(0.2, 4)
