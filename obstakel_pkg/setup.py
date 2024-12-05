@@ -50,7 +50,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obstakel = obstakel_pkg.obstakel:main'
+            'obstakel = obstakel_pkg.obstakel:main',
+            'obstakelReal = obstakel_pkg.obstakelReal:main'
         ],
     },
 )

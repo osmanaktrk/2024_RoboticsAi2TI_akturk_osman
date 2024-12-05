@@ -29,7 +29,7 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'subpub_pkg'
+package_name = 'patrol_pkg'
 
 setup(
     name=package_name,

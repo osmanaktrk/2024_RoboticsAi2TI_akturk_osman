@@ -7,10 +7,9 @@ import time
 import random
 import math
 
-class Distance(Node):
-
+class Real2(Node):
     def __init__(self):
-        super().__init__('path')
+        super().__init__("Real2")
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
         self.subscriber = self.create_subscription(LaserScan, '/scan', self.laser_callback, QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
         self.timer_period = 1  # Timer period in seconds
@@ -23,22 +22,22 @@ class Distance(Node):
 
 
 
-
     def laser_callback(self, msg):
         self.laser_forward = msg.ranges[359]
         self.laser_frontLeft = min(msg.ranges[0:20])
         self.laser_frontRight = min(msg.ranges[340:359])
 
-    def move(self, linear_velocity, distance):
+    def move(self, distance):
        # Log the orientation (linear_velocity)
-        self.get_logger().info(f'Moving with linear velocity: {linear_velocity} distance: {distance} m')
+        self.get_logger().info(f'Moving with distance: {distance} m')
 
-        self.cmd.linear.x = linear_velocity
+        
+        self.cmd.linear.x = 0.1
         self.cmd.angular.z = 0.0
     
 
         #To divide the distance into a certain speed and apply it as a time
-        duration = distance/linear_velocity
+        duration = distance/0.1
 
 
         start_time = time.time()
@@ -59,8 +58,6 @@ class Distance(Node):
         self.cmd.angular.z = 0.0
         self.publisher_.publish(self.cmd)
 
-
-
     def turn(self, angle):
         # Log the orientation (angle)
         self.get_logger().info(f'Moving with angle: {angle}')
@@ -74,7 +71,7 @@ class Distance(Node):
 
         start_time = time.time()
 
-        duration = math.pi/((180/abs(angle))*self.cmd.angular.z)
+        duration = math.pi/((180/abs(angle))*abs(self.cmd.angular.z))
         self.get_logger().info(f"duration: {duration}")
 
         while time.time() - start_time < duration:
@@ -87,51 +84,26 @@ class Distance(Node):
         self.publisher_.publish(self.cmd)
 
 
-
-
     def motion(self):
         self.cmd.linear.x = 0.0
         self.cmd.angular.z = 0.0
-
-        # Turn 90 degrees to the right
+        
+        self.move(1.9)
         self.turn(90)
-
-        # Drive 50 cm forward
-        self.move(0.2, 0.5)
-
-        # Turn 90 degrees to the left
+        self.move(1.2)
         self.turn(-90)
-
-        # Drive 3.3 meter forward (assuming max speed is 0.2 m/s)
-        self.move(0.2, 3.3)
-
-        # Turn 90 degrees to the left
-        self.turn(-90)
-
-        # Drive 1.5 meter forward (assuming max speed is 0.2 m/s)
-        self.move(0.2, 1.5)
-
-        # Turn 90 degrees to the left 
-        self.turn(-90)
-
-        # Drive 4 meter forward (assuming max speed is 0.2 m/s)
-        self.move(0.2, 4)
-
-        # Turn 90 degrees to the right
+        self.move(1.9)
         self.turn(90)
-
-        # Drive 4 meter forward (assuming max speed is 0.2 m/s)
-        self.move(0.2, 4)
-
-
-
+        self.move(1.1)
+        self.turn(-90)
+        self.motion(0.3)
 
 
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = Distance()
+    node = Real2()
     node.motion()
     node.destroy_node()
     rclpy.shutdown()

@@ -7,6 +7,7 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 import random
+import time
 
 class  Obstakel(Node):
 
@@ -17,7 +18,7 @@ class  Obstakel(Node):
         # create the publisher object
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
         # create the subscriber object
-        self.subscriber = self.create_subscription(LaserScan, '/scan', self.laser_callback, QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
+        self.subscriber = self.create_subscription(LaserScan, '/scan', self.laser_callback, QoSProfile(depth=10, reliability=ReliabilityPolicy.SYSTEM_DEFAULT))
         # define the timer period for 0.5 seconds
         self.timer_period = 0.5
         # define the variable to save the received info
@@ -34,9 +35,10 @@ class  Obstakel(Node):
 
     def laser_callback(self,msg):
         # Save the frontal laser scan info
-        self.laser_frontLeft = min(msg.ranges[0:15])
-        self.laser_frontRight = min(msg.ranges[349:359])
+        self.laser_frontLeft = min(msg.ranges[314:359])
+        self.laser_frontRight = min(msg.ranges[0:45])
         self.laser_forward = min(self.laser_frontLeft, self.laser_frontRight)
+        #self.laser_forward = msg.ranges[0]
 
 
         
@@ -48,19 +50,25 @@ class  Obstakel(Node):
             #stop
             self.cmd.linear.x = 0.0
 
-            if(self.laser_frontLeft<0.5 and self.laser_frontRight>0.5):
+            if(self.laser_frontLeft < self.laser_frontRight):
                 #turn right
-                self.cmd.angular.z = -1*random.randint(1, 20)/10
-                self.cmd.linear.x = 0.3
+                #self.cmd.angular.z = -1*random.randint(1, 10)/10
+                
+                self.cmd.angular.z = random.uniform(-0.5, -0.1)
+                time.sleep = random.uniform(0, 0.5)
+                self.cmd.linear.x = 0.1
 
-            elif(self.laser_frontLeft>0.5 and self.laser_frontRight<0.5):
+            elif(self.laser_frontLeft > self.laser_frontRight):
                 #turn left
-                self.cmd.angular.z = random.randint(1, 20)/10
-                self.cmd.linear.x = 0.3
+                #self.cmd.angular.z = random.randint(1, 10)/10
+                
+                self.cmd.angular.z = random.uniform(0.1, 0.5)
+                time.sleep = random.uniform(0, 0.5)
+                self.cmd.linear.x = 0.1
 
             else:
                 #turn right fix
-                self.cmd.angular.z = -0.5
+                self.cmd.angular.z = -0.3
 
         else:
             self.cmd.linear.x = 0.3
