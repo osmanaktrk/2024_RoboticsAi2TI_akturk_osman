@@ -51,7 +51,7 @@ class  ObstakelReal(Node):
 
     def move_forward(self):
         if(self.laser_forward>self.range):
-            self.cmd.linear.x = 0.3
+            self.cmd.linear.x = 0.1
             self.cmd.angular.z = 0.0
             self.publisher_.publish(self.cmd)
             self.get_logger().info("Move Forward")
