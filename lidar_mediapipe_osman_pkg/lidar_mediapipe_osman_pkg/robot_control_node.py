@@ -14,6 +14,8 @@ class RobotControl(Node):
     def __init__(self):
         super().__init__('robot_control_node')
         
+        
+
         # ROS 2 Publishers and Subscribers
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
         self.speed_subscriber = self.create_subscription(Float32, 'robot_speed', self.speed_callback, 10)

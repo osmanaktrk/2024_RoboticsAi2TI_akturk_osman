@@ -11,13 +11,15 @@ class CameraNode(Node):
     def __init__(self):
         super().__init__('camera_node')
         
+        self.max_speed = 0.15
+
         # ROS 2 Publishers
         self.speed_publisher = self.create_publisher(Float32, 'robot_speed', 10)
         self.stop_publisher = self.create_publisher(Bool, 'robot_stop', 10)
         
         # Mediapipe initialization
         self.mp_hands = mp.solutions.hands
-        self.hands = self.mp_hands.Hands(min_detection_confidence=0.8)
+        self.hands = self.mp_hands.Hands(min_detection_confidence=0.5)
         self.mp_draw = mp.solutions.drawing_utils
         
         # OpenCV Camera Initialization
@@ -84,7 +86,7 @@ class CameraNode(Node):
         distance = math.sqrt((thumb_tip.x - index_tip.x)**2 + (thumb_tip.y - index_tip.y)**2)
 
         # Map distance to speed (0.0 to 0.15)
-        return max(0.0, min(0.15, distance))
+        return max(0.0, min(self.max_speed, distance))
 
 
 def main(args=None):
