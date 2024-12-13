@@ -40,7 +40,7 @@ class RobotControl(Node):
         # Process laser scan data
         self.laser_frontLeft = min(msg.ranges[:35], default=float('inf'))
         self.laser_frontRight = min(msg.ranges[-35:], default=float('inf'))
-        self.laser_forwardArea = min(msg.ranges[-35:] + msg.ranges[:40], default=float('inf'))
+        self.laser_forwardArea = min(msg.ranges[-35:] + msg.ranges[:35], default=float('inf'))
 
         if not self.motion_in_progress and not self.stop_robot:
             self.motion()
