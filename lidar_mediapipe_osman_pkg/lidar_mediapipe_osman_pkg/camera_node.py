@@ -83,9 +83,13 @@ class CameraNode(Node):
         thumb_tip = hand_landmarks.landmark[self.mp_hands.HandLandmark.THUMB_TIP]
         index_tip = hand_landmarks.landmark[self.mp_hands.HandLandmark.INDEX_FINGER_TIP]
 
+        
+
         # Calculate distance between thumb and index finger
         distance = math.sqrt((thumb_tip.x - index_tip.x)**2 + (thumb_tip.y - index_tip.y)**2)
-
+        # Apply threshold to avoid very small non-zero values
+        if distance < 0.04:
+            distance = 0.0
         # Map distance to speed (min to max)
         return max(self.min_speed, min(self.max_speed, distance))
 
@@ -106,3 +110,6 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+
+
