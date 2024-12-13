@@ -12,6 +12,7 @@ class CameraNode(Node):
         super().__init__('camera_node')
         
         self.max_speed = 0.15
+        self.min_speed = 0.0
 
         # ROS 2 Publishers
         self.speed_publisher = self.create_publisher(Float32, 'robot_speed', 10)
@@ -85,8 +86,8 @@ class CameraNode(Node):
         # Calculate distance between thumb and index finger
         distance = math.sqrt((thumb_tip.x - index_tip.x)**2 + (thumb_tip.y - index_tip.y)**2)
 
-        # Map distance to speed (0.0 to 0.15)
-        return max(0.0, min(self.max_speed, distance))
+        # Map distance to speed (min to max)
+        return max(self.min_speed, min(self.max_speed, distance))
 
 
 def main(args=None):
