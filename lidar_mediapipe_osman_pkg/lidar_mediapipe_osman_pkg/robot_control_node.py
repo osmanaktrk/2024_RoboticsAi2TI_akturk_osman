@@ -1,9 +1,12 @@
+
+
+
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import ReliabilityPolicy, QoSProfile
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Bool
 import random
 import math
 
@@ -14,6 +17,7 @@ class RobotControl(Node):
         # ROS 2 Publishers and Subscribers
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
         self.speed_subscriber = self.create_subscription(Float32, 'robot_speed', self.speed_callback, 10)
+        self.stop_subscriber = self.create_subscription(Bool, 'robot_stop', self.stop_callback, 10)
         self.laser_subscriber = self.create_subscription(
             LaserScan, '/scan', self.laser_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.SYSTEM_DEFAULT)
@@ -28,26 +32,40 @@ class RobotControl(Node):
         self.laser_frontLeft = float('inf')
         self.laser_frontRight = float('inf')
         self.range = 0.4  # Obstacle avoidance range
+        self.stop_robot = True  # Initially stop the robot
 
     def laser_callback(self, msg):
         # Process laser scan data
-        self.laser_frontLeft = min(msg.ranges[:40], default=float('inf'))
-        self.laser_frontRight = min(msg.ranges[-40:], default=float('inf'))
-        self.laser_forwardArea = min(msg.ranges[-40:] + msg.ranges[:40], default=float('inf'))
+        self.laser_frontLeft = min(msg.ranges[:35], default=float('inf'))
+        self.laser_frontRight = min(msg.ranges[-35:], default=float('inf'))
+        self.laser_forwardArea = min(msg.ranges[-35:] + msg.ranges[:40], default=float('inf'))
 
-        if not self.motion_in_progress:
+        if not self.motion_in_progress and not self.stop_robot:
             self.motion()
 
     def speed_callback(self, msg):
         # Receive speed from CameraNode
         self.speed = msg.data
 
+    def stop_callback(self, msg):
+        # Receive stop signal from CameraNode
+        self.stop_robot = msg.data
+        if self.stop_robot:
+            self.get_logger().info("Stop signal received. Stopping robot and canceling any turns.")
+            self.stop()
+        else:
+            self.get_logger().info("Start signal received. Robot can move.")
+
     def stop(self):
         # Stop the robot
         self.cmd.linear.x = 0.0
         self.cmd.angular.z = 0.0
         self.publisher_.publish(self.cmd)
-        self.get_logger().info("Stop")
+        self.motion_in_progress = False
+        if self.timer:
+            self.timer.cancel()
+            self.timer = None
+        self.get_logger().info("Robot stopped.")
 
     def move_forward(self):
         # Move forward if no obstacle is detected
@@ -75,15 +93,11 @@ class RobotControl(Node):
         self.cmd.angular.z = 0.3 if direction == 'l' else -0.3
         self.publisher_.publish(self.cmd)
         self.get_logger().info(f"Corner Turn {'Left' if direction == 'l' else 'Right'}")
-        self.timer = self.create_timer(random.uniform(2.0, 5.0), self.stop_turn)
+        self.timer = self.create_timer(random.uniform(2.0, 5.5), self.stop_turn)
 
     def stop_turn(self):
         # Stop turning
         self.stop()
-        self.motion_in_progress = False
-        if self.timer:
-            self.timer.cancel()
-            self.timer = None
 
     def motion(self):
         # Decide motion based on laser scan data
@@ -116,7 +130,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
-
-
 
