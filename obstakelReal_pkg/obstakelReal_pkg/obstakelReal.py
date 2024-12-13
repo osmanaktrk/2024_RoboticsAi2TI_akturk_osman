@@ -17,8 +17,8 @@ class  ObstakelReal(Node):
         self.motion_in_progress = False
         self.cmd = Twist()
         self.laser_forwardArea = 0
-        self.laser_frontLeft_30 = 0
-        self.laser_frontRight_30 = 0
+        self.laser_frontLeft = 0
+        self.laser_frontRight = 0
         self.laser_forward = 0
         self.range = 0.4
 
@@ -30,9 +30,9 @@ class  ObstakelReal(Node):
 
 
     def laser_callback(self,msg):
-        self.laser_frontLeft_30 = min(msg.ranges[:40])
+        self.laser_frontLeft = min(msg.ranges[:40])
        
-        self.laser_frontRight_30 = min(msg.ranges[-40:])
+        self.laser_frontRight = min(msg.ranges[-40:])
              
         
         self.laser_forwardArea = min(msg.ranges[-40:] + msg.ranges[:40])
@@ -102,15 +102,15 @@ class  ObstakelReal(Node):
             
            
 
-            if(self.laser_frontRight_30 > self.range and self.laser_frontRight_30 > self.laser_frontLeft_30):
+            if(self.laser_frontRight > self.range and self.laser_frontRight > self.laser_frontLeft):
                 self.turn('r')
-            elif(self.laser_frontLeft_30 > self.range and self.laser_frontLeft_30 > self.laser_frontRight_30):
+            elif(self.laser_frontLeft > self.range and self.laser_frontLeft > self.laser_frontRight):
                 self.turn('l')
 
        
 
             else:
-                if (self.laser_frontLeft_30 > self.laser_frontRight_30):
+                if (self.laser_frontLeft > self.laser_frontRight):
                     self.turn_corner('l')     
                 else:
                     self.turn_corner('r') 
