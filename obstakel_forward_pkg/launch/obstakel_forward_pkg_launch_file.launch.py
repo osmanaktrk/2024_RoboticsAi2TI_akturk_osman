@@ -4,8 +4,8 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         Node(
-            package='obstakelReal_pkg',
-            executable='obstakelReal',
+            package='obstakel_forward_pkg',
+            executable='obstakel_forward',
             output='screen'),
     ])
 

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'obstakelForward_pkg'
+package_name = 'obstakel_forward_pkg'
 
 setup(
     name=package_name,
@@ -28,7 +28,7 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'obstakelForward_pkg'
+package_name = 'obstakel_forward_pkg'
 
 setup(
     name=package_name,
@@ -49,7 +49,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obstakelForward = obstakelForward_pkg.obstakelForward:main'
+            'obstakel_forward = obstakel_forward_pkg.obstakel_forward:main'
         ],
     },
 )

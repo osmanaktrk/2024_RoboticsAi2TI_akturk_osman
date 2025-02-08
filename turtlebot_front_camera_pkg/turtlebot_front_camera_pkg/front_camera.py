@@ -22,7 +22,7 @@ class FrontCameraViewer(Node):
             # Convert ROS 2 Image message to OpenCV format
             cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
 
-            scale_percent = 30  # Resize to 50% of the original size
+            scale_percent = 30  # Resize the original size
             width = int(cv_image.shape[1] * scale_percent / 100)
             height = int(cv_image.shape[0] * scale_percent / 100)
 

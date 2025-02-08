@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'obstakelReal_pkg'
+package_name = 'obstakel_real_pkg'
 
 setup(
     name=package_name,
@@ -29,7 +29,7 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'obstakelReal_pkg'
+package_name = 'obstakel_real_pkg'
 
 setup(
     name=package_name,
@@ -50,7 +50,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obstakelReal = obstakelReal_pkg.obstakelReal:main'
+            'obstakel_real = obstakel_real_pkg.obstakel_real:main'
         ],
     },
 )

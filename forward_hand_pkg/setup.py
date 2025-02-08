@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'forwardHand_pkg'
+package_name = 'forward_hand_pkg'
 
 setup(
     name=package_name,
@@ -29,7 +29,7 @@ from setuptools import setup
 import os
 from glob import glob
 
-package_name = 'forwardHand_pkg'
+package_name = 'forward_hand_pkg'
 
 setup(
     name=package_name,
@@ -50,8 +50,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'camera_node = forwardHand_pkg.CameraNode:main',
-            'robot_control_node = forwardHand_pkg.RobotControlNode:main',
+            'camera_node = forward_hand_pkg.CameraNode:main',
+            'robot_control_node = forward_hand_pkg.RobotControlNode:main',
             
         ],
     },
